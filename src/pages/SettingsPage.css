@@ -1,0 +1,253 @@
+/* --- SETTINGS PAGE --- */
+.settings-container {
+  background-color: #0a0a0a;
+  color: white;
+  min-height: 100vh;
+  padding: 30px 40px;
+  font-family: 'Arial', sans-serif;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #c4a454;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.brand-logo {
+  color: #c4a454;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* --- LAYOUT PRINCIPAL --- */
+.settings-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* --- SECCIÓN PERFIL (avatar + cuenta) --- */
+.profile-section {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.avatar-circle {
+  width: 110px;
+  height: 110px;
+  border: 3px solid #c4a454;
+  border-radius: 50%;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Icono de persona dentro del avatar */
+.avatar-circle::after {
+  content: '';
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #c4a454;
+  opacity: 0.4;
+}
+
+.btn-change {
+  background-color: #c4a454;
+  color: black;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btn-change:hover {
+  background-color: #d4b464;
+}
+
+/* --- INFO DE CUENTA --- */
+.account-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.account-info h3,
+.settings-section h3 {
+  color: #aaa;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* --- INPUTS OSCUROS --- */
+.dark-input {
+  background-color: transparent;
+  border: 1px solid #444;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.dark-input::placeholder {
+  color: #888;
+}
+
+.dark-input:focus {
+  outline: none;
+  border-color: #c4a454;
+}
+
+/* --- BOTONES CERRAR SESIÓN / ELIMINAR --- */
+.danger-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn-text {
+  background-color: #c4a454;
+  color: black;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-text:hover {
+  background-color: #d4b464;
+}
+
+.btn-text.delete {
+  background-color: #c4a454;
+}
+
+/* --- NOTIFICACIONES --- */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.switch-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  color: white;
+}
+
+/* --- SWITCHES VERDES --- */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #444;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+input:checked + .slider {
+  background-color: #4cd964;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* --- SEGURIDAD --- */
+.security-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.security-label {
+  color: white;
+  font-size: 0.95rem;
+  min-width: 150px;
+}
+
+.security-row .dark-input {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+/* --- BOTÓN GUARDAR --- */
+.btn-save-main {
+  background-color: #c4a454;
+  color: black;
+  width: 200px;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 30px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+}
+
+.btn-save-main:hover {
+  background-color: #d4b464;
+}
