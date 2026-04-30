@@ -48,7 +48,7 @@ const Sidebar = () => {
       <button style={styles.navButton} onClick={() => navigate("/servicios")}>
         Servicios
       </button>
-      <button style={styles.navButton} onClick={() => navigate("/admin")}>
+      <button style={styles.navButton} onClick={() => navigate("/admin/personal")}>
         Admin
       </button>
       <button style={styles.navButton} onClick={() => navigate("/reportes")}>
