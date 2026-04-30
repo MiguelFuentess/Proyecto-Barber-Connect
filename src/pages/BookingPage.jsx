@@ -13,7 +13,7 @@ const sedes = [
     telefono: '(+57) 3222056788',
     descripcion: 'Ubicados en el corazón de Medellín, somos una barbería que combina tradición y estilo moderno.',
     horario: { lunes: '9:30 am - 8:00 pm', martes: '9:30 am - 8:00 pm', miercoles: '9:30 am - 8:00 pm', jueves: '9:30 am - 8:00 pm', viernes: '9:30 am - 8:00 pm', sabado: '9:30 am - 8:00 pm', domingo: '10:00 am - 4:00 pm' },
-    imagen: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=300',
+    imagen: 'https://images.pexels.com/photos/9146943/pexels-photo-9146943.jpeg',
     especialistas: ['Wilmer Andres Chaparro', 'Kevin Rojas', 'Dauly Velasquez', 'Carmen Rodriguez'],
   },
   {
@@ -24,7 +24,7 @@ const sedes = [
     telefono: '(+57) 3222056789',
     descripcion: 'Ubicados en Bogotá, somos una barbería diseñada para quienes viven al ritmo de la ciudad.',
     horario: { lunes: '9:30 am - 8:00 pm', martes: '9:30 am - 8:00 pm', miercoles: '9:30 am - 8:00 pm', jueves: '9:30 am - 8:00 pm', viernes: '9:30 am - 8:00 pm', sabado: '9:30 am - 8:00 pm', domingo: '10:00 am - 4:00 pm' },
-    imagen: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=300',
+    imagen: 'https://images.pexels.com/photos/18173343/pexels-photo-18173343.jpeg',
     especialistas: ['Wilmer Andres Chaparro', 'Kevin Rojas', 'Dauly Velasquez', 'Carmen Rodriguez'],
   },
   {
@@ -35,7 +35,7 @@ const sedes = [
     telefono: '(+57) 3222056788',
     descripcion: 'En nuestra sede de Cartagena encontrarás estilo, frescura y buena energía caribeña.',
     horario: { lunes: '9:30 am - 8:00 pm', martes: '9:30 am - 8:00 pm', miercoles: '9:30 am - 8:00 pm', jueves: '9:30 am - 8:00 pm', viernes: '9:30 am - 8:00 pm', sabado: '9:30 am - 8:00 pm', domingo: '10:00 am - 4:00 pm' },
-    imagen: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=300',
+    imagen: 'https://images.pexels.com/photos/20785318/pexels-photo-20785318.jpeg',
     especialistas: ['Wilmer Andres Chaparro', 'Kevin Rojas', 'Dauly Velasquez', 'Carmen Rodriguez'],
   },
 ];

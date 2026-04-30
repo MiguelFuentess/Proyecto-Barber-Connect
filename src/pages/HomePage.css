@@ -305,7 +305,7 @@
     background-position: center;
 }
 .expert2 { 
-    background-image: url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=500');
+    background-image: url('https://images.pexels.com/photos/2881253/pexels-photo-2881253.jpeg');
     background-size: cover;
     background-position: center;
 }
@@ -428,6 +428,16 @@
 .map-section {
     padding: 80px 50px;
     text-align: center;
+}
+
+.map-btn-container {
+  margin-bottom: 30px;
+}
+
+.map-wrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
 }
 
 .btn-gold-large {
