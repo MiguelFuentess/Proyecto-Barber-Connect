@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/sidebar";
+import CambiosGuardadosCorrectamente from "../components/cambiosGuardadosCorrec";
 
 const Configuracion = () => {
-  // Aquí defines tus estilos (puedes mover esto a un archivo .css luego)
+  const [isChangeOpen, setIsChangeOpen] = useState(false);
   const styles = {
     pageContainer: {
       display: "flex",
@@ -42,10 +43,9 @@ const Configuracion = () => {
 
   return (
     <div style={styles.pageContainer}>
-      <Sidebar /> {/* 1. El Sidebar siempre a la izquierda */}
+      <Sidebar />
       <main style={styles.main}>
         {" "}
-        {/* 2. El contenido a la derecha */}
         <h1
           style={{ color: "#d4af37", fontSize: "48px", marginBottom: "40px" }}
         >
@@ -89,8 +89,14 @@ const Configuracion = () => {
             />
           </section>
         </div>
-        <button style={styles.saveBtn}>Guardar</button>
+        <button style={styles.saveBtn} onClick={() => setIsChangeOpen(true)}>
+          Guardar
+        </button>
       </main>
+      <CambiosGuardadosCorrectamente
+        isOpen={isChangeOpen}
+        onClose={() => setIsChangeOpen(false)}
+      />
     </div>
   );
 };

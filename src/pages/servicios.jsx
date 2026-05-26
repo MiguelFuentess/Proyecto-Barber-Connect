@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/sidebar";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import AgregarServcio from "../components/agregarServicio";
+import EditarServicio from "../components/editarServicio";
+import EliminarServicio from "../components/eliminarServicio";
 
 const Servicios = () => {
-  // Datos estáticos para simular el catálogo de la barbería
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  //catálogo de la barbería
   const servicios = [
     {
       id: 1,
@@ -119,7 +125,7 @@ const Servicios = () => {
       gap: "8px",
       fontSize: "18px",
     },
-    // Grid de servicios
+
     grid: {
       display: "grid",
       gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
@@ -155,7 +161,8 @@ const Servicios = () => {
       <main style={styles.main}>
         <div style={styles.header}>
           <h1 style={styles.title}>Servicios</h1>
-          <button style={styles.btnAdd}>
+          {/* 4. Cambiar estado a true al hacer clic */}
+          <button style={styles.btnAdd} onClick={() => setIsAddOpen(true)}>
             <Plus size={20} /> Agregar
           </button>
         </div>
@@ -174,13 +181,30 @@ const Servicios = () => {
               </div>
 
               <div style={styles.actions}>
-                <Pencil size={20} style={{ cursor: "pointer" }} />
-                <Trash2 size={20} style={{ cursor: "pointer" }} />
+                <Pencil
+                  size={20}
+                  onClick={() => setIsEditOpen(true)}
+                  style={{ cursor: "pointer" }}
+                />
+                <Trash2
+                  size={20}
+                  onClick={() => setIsDeleteOpen(true)}
+                  style={{ cursor: "pointer" }}
+                />
               </div>
             </div>
           ))}
         </div>
       </main>
+      <AgregarServcio isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} />
+      <EditarServicio
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+      />
+      <EliminarServicio
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+      />
     </div>
   );
 };

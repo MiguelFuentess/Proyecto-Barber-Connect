@@ -13,14 +13,14 @@ const Reportes = () => {
     },
     main: { flex: 1, padding: "40px" },
     topSection: { display: "flex", gap: "20px", marginBottom: "20px" },
-    // Tarjetas oscuras
+
     card: {
       backgroundColor: "#1a1a1a",
       padding: "20px",
       borderRadius: "15px",
       flex: 1,
     },
-    // Gráfica de barras manual
+
     chartContainer: {
       display: "flex",
       alignItems: "flex-end",
@@ -34,7 +34,7 @@ const Reportes = () => {
       backgroundColor: isHighlight ? "#d4af37" : "#333",
       borderRadius: "5px 5px 0 0",
     }),
-    // Estilos de texto
+
     goldText: { color: "#d4af37" },
     incomeText: {
       fontSize: "42px",

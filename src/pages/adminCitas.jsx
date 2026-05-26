@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 
 const AdminCitas = () => {
-  // Datos estáticos para la estructura
   const dias = [
     "Lunes",
     "Martes",
@@ -48,7 +47,7 @@ const AdminCitas = () => {
       flexDirection: "column",
     },
     headerTitle: { color: "#d4af37", fontSize: "48px", marginBottom: "30px" },
-    // Barra de controles (flechas, hoy, botones dia/semana)
+    // Barra de controles
     controlsRow: {
       display: "flex",
       justifyContent: "space-between",
@@ -80,10 +79,10 @@ const AdminCitas = () => {
       cursor: "pointer",
     },
 
-    // Contenedor del Calendario
+    // Calendario
     calendarContainer: {
       display: "grid",
-      gridTemplateColumns: "80px repeat(7, 1fr)", // 1era columna para horas, luego 7 para dias
+      gridTemplateColumns: "80px repeat(7, 1fr)",
       border: "1px solid #444",
       borderRadius: "10px",
       overflow: "hidden",
@@ -106,7 +105,7 @@ const AdminCitas = () => {
     emptyCell: {
       borderBottom: "1px solid #222",
       borderLeft: "1px solid #222",
-      height: "50px", // Altura de cada celda de tiempo
+      height: "50px",
     },
   };
 

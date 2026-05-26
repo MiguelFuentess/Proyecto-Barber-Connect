@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Aquí puedes tener tus otras rutas */}
+        {/* rutas */}
         <Route path="/configuration" element={<Configuracion />} />
         <Route path="/reportes" element={<Reportes />} />
         <Route path="/citas" element={<AdminCitas />} />
