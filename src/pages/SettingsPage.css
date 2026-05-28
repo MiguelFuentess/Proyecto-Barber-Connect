@@ -251,3 +251,16 @@ input:checked + .slider:before {
 .btn-save-main:hover {
   background-color: #d4b464;
 }
+
+.home-btn {
+  background: none;
+  border: none;
+  color: #c4a454;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.home-btn:hover {
+  color: #d4b464;
+}

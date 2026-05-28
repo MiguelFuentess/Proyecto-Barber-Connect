@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 const AdminCitas = () => {
-  // Datos estáticos para la estructura
+  
   const dias = [
     "Lunes",
     "Martes",
@@ -106,7 +106,7 @@ const AdminCitas = () => {
     emptyCell: {
       borderBottom: "1px solid #222",
       borderLeft: "1px solid #222",
-      height: "50px", // Altura de cada celda de tiempo
+      height: "50px", 
     },
   };
 
@@ -138,7 +138,7 @@ const AdminCitas = () => {
 
         {/* CALENDARIO */}
         <div style={styles.calendarContainer}>
-          {/* Fila de Encabezado: Espacio vacío + Dias */}
+
           <div style={{ ...styles.headerCell, borderLeft: "none" }}></div>
           {dias.map((dia) => (
             <div key={dia} style={styles.headerCell}>

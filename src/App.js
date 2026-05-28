@@ -9,6 +9,7 @@ import SettingsPage from "./pages/SettingsPage";
 import HomePage from "./pages/HomePage";
 import { AuthProvider } from "./context/AuthContext";
 import BookingPage from "./pages/BookingPage";
+import HistorialPage from './pages/HistorialPage';
 
 
 
@@ -27,6 +28,7 @@ function App() {
         {<Route path="/citas" element={<AdminCitas />} />}
         {<Route path="/servicios" element={<Servicios />} />}
         {<Route path="/Settingspage" element={<SettingsPage />} />}
+        {<Route path="/historial" element={<HistorialPage />} />}
       </Routes>
     </Router>
     </AuthProvider>

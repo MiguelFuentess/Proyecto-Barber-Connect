@@ -411,3 +411,31 @@
   background-color: #8a6f20;
   border: 2px solid white;
 }
+
+.check-selected {
+  color: #c4a454;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-left: auto;
+  padding-right: 8px;
+}
+
+.resumen-servicio-item {
+  font-size: 0.85rem;
+  color: #e0c97a;
+  padding-left: 10px;
+  margin-top: 3px;
+}
+
+.home-btn-booking {
+  background: none;
+  border: none;
+  color: #c4a454;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.home-btn-booking:hover {
+  color: #d4b464;
+}
