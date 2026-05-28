@@ -1,0 +1,152 @@
+.historial-container {
+  background-color: #0a0a0a;
+  color: white;
+  min-height: 100vh;
+  padding: 30px 40px;
+  font-family: 'Arial', sans-serif;
+}
+
+.historial-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.back-btn-historial {
+  background: none;
+  border: none;
+  color: #c4a454;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.historial-title {
+  color: #c4a454;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.historial-usuario {
+  color: #aaa;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+.citas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cita-card {
+  background-color: #1a1a1a;
+  border: 1px solid #3a2e08;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cita-header {
+  background-color: #3a2e08;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cita-fecha {
+  color: #c4a454;
+  font-weight: 600;
+}
+
+.cita-estado {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.cita-estado.completada {
+  background-color: #1a4a1a;
+  color: #4cd964;
+}
+
+.cita-estado.pendiente {
+  background-color: #4a3a00;
+  color: #c4a454;
+}
+
+.cita-body {
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cita-body p {
+  color: #ccc;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.historial-empty {
+  text-align: center;
+  margin-top: 80px;
+  color: #aaa;
+}
+
+.btn-agendar {
+  background-color: #c4a454;
+  color: black;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.cita-actions {
+  display: flex;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.btn-modificar {
+  flex: 1;
+  background-color: #3a2e08;
+  color: #c4a454;
+  border: 1px solid #c4a454;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-modificar:hover {
+  background-color: #4a3a0a;
+}
+
+.btn-cancelar {
+  flex: 1;
+  background-color: #2a0a0a;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-cancelar:hover {
+  background-color: #3a0a0a;
+}
+
+.cita-estado.cancelada {
+  background-color: #2a0a0a;
+  color: #ff4444;
+}

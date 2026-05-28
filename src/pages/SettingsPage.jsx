@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ← agrega esto
-import { FaArrowLeft } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext'; // ← agrega esto
+import { useNavigate } from 'react-router-dom'; 
+import { FaArrowLeft, FaHome } from 'react-icons/fa'; 
 import './SettingsPage.css';
+import { useAuth } from '../context/AuthContext';
 
 const SettingsPage = () => {
-  const navigate = useNavigate(); // ← agrega esto
-  const { logout } = useAuth();   // ← agrega esto
+  const navigate = useNavigate(); 
+  const { user, logout } = useAuth();   
 
   const [notifSMS, setNotifSMS] = useState(true);
   const [notifEmail, setNotifEmail] = useState(false);
 
   const [userData, setUserData] = useState({
-    username: 'Nombre del usuario',
+    username: user?.nombre || 'Nombre del usuario',
     phone: '',
     newPhone: '',
     newEmail: '',
@@ -31,11 +31,14 @@ const SettingsPage = () => {
   return (
     <div className="settings-container">
       <header className="settings-header">
-        <button className="back-btn" onClick={() => window.history.back()}>
-          <FaArrowLeft />
-        </button>
-        <h1 className="brand-logo">Barber Connect</h1>
-      </header>
+  <button className="back-btn" onClick={() => window.history.back()}>
+    <FaArrowLeft />
+  </button>
+  <h1 className="brand-logo">Barber Connect</h1>
+  <button className="home-btn" onClick={() => navigate('/')}> {/* ← nuevo */}
+    <FaHome />
+  </button>
+</header>
 
       <main className="settings-content">
         <div className="settings-grid">
@@ -107,6 +110,12 @@ const SettingsPage = () => {
             </div>
           </section>
         </div>
+
+        <div className="danger-actions">
+          <button className="btn-text" onClick={() => navigate('/historial')}>
+    📋 Ver historial de citas
+  </button>
+</div>
 
 <button className="btn-save-main" onClick={() => navigate('/')}>Guardar</button>      </main>
     </div>

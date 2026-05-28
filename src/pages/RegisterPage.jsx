@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './RegisterPage.css'; // Asegúrate de importar el CSS que crearemos
+import './RegisterPage.css'; 
 
 const RegisterPage = () => {
   const navigate = useNavigate();

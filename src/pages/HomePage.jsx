@@ -183,7 +183,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Sección Servicios / Especialidades (Imagen 3 y 5) */}
+      
       <section className="specialities-section" ref={serviciosRef}>
         <h2>Especialidades</h2>
         <div className="specialities-accordion">
@@ -212,7 +212,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Footer y Mapa (Imagen 4) */}
+      
       <section className="map-section">
   <div className="map-btn-container">
     <button className="btn-gold-large" onClick={handleAgendarCita}>Agenda tu cita</button>

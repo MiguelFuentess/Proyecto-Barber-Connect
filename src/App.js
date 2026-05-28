@@ -9,6 +9,9 @@ import SettingsPage from "./pages/SettingsPage";
 import HomePage from "./pages/HomePage";
 import { AuthProvider } from "./context/AuthContext";
 import BookingPage from "./pages/BookingPage";
+import HistorialPage from './pages/HistorialPage';
+
+
 import HeadquartersList from "./pages/headquarters";
 import AdminPeoples from "./pages/admin/peoples";
 import AdminHeadquarters from "./pages/admin/headquarters";
@@ -29,6 +32,7 @@ function App() {
         {<Route path="/citas" element={<AdminCitas />} />}
         {<Route path="/servicios" element={<Servicios />} />}
         {<Route path="/Settingspage" element={<SettingsPage />} />}
+        {<Route path="/historial" element={<HistorialPage />} />}
         <Route path="/lista-sedes" element={<HeadquartersList />} />
         <Route path="/admin/personal" element={<AdminPeoples />} />
         <Route path="/admin/sedes" element={<AdminHeadquarters />} />

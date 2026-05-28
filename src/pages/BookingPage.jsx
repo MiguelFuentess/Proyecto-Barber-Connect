@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
-import { FaArrowLeft, FaTimes, FaSearch } from 'react-icons/fa';
+import { FaArrowLeft, FaTimes, FaSearch, FaHome  } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
 import './BookingPage.css';
 
 const sedes = [
@@ -64,41 +65,24 @@ const servicios = [
 ];
 
 const especialistasData = [
-  { nombre: 'WILMER ANDRES CHAPARRO', servicios: [
-    { desc: '+ SERVICIO DE BARBA TRADICIONAL', time: '45m', price: '$48,000' },
-    { desc: '+ CORTE CABELLO', time: '45m', price: '$55,000' },
-    { desc: '+ BLACK MASK TRADICIONAL', time: '1h', price: '$35,000' },
-    { desc: '+ PEINADO', time: '20m', price: '$25,000' },
-  ]},
-  { nombre: 'KEVIN ROJAS', servicios: [
-    { desc: '+ SERVICIO DE BARBA TRADICIONAL', time: '45m', price: '$48,000' },
-    { desc: '+ CORTE CABELLO', time: '45m', price: '$55,000' },
-    { desc: '+ BLACK MASK TRADICIONAL', time: '1h', price: '$35,000' },
-    { desc: '+ PEINADO', time: '20m', price: '$25,000' },
-  ]},
-  { nombre: 'DAULY VELASQUEZ', servicios: [
-    { desc: '+ SERVICIO DE BARBA TRADICIONAL', time: '45m', price: '$48,000' },
-    { desc: '+ CORTE CABELLO', time: '45m', price: '$55,000' },
-    { desc: '+ BLACK MASK TRADICIONAL', time: '1h', price: '$35,000' },
-    { desc: '+ PEINADO', time: '20m', price: '$25,000' },
-  ]},
-  { nombre: 'CARMEN RODRIGUEZ', servicios: [
-    { desc: '+ SERVICIO DE BARBA TRADICIONAL', time: '45m', price: '$48,000' },
-    { desc: '+ CORTE CABELLO', time: '45m', price: '$55,000' },
-    { desc: '+ BLACK MASK TRADICIONAL', time: '1h', price: '$35,000' },
-    { desc: '+ PEINADO', time: '20m', price: '$25,000' },
-  ]},
+  { nombre: 'WILMER ANDRES CHAPARRO' },
+  { nombre: 'KEVIN ROJAS' },
+  { nombre: 'DAULY VELASQUEZ' },
+  { nombre: 'CARMEN RODRIGUEZ' },
 ];
 
-// ─── PASO 1: Lista de sedes ───────────────────────────────────────────────────
+// ─── PASO 1 ───────────────────────────────────────────────────────────────────
 const StepSedes = ({ onSelect }) => {
+  const navigate = useNavigate(); // ← agrega esto
   const [search, setSearch] = useState('');
   const filtered = sedes.filter(s => s.nombre.toLowerCase().includes(search.toLowerCase()));
+  // ...
 
   return (
     <div className="booking-container">
-      <div className="booking-header-simple">
-        <h2 className="booking-title-gold">Nuestras sedes</h2>
+      <div className="booking-header">
+        <h2 className="booking-title-gold" style={{flex: 1}}>Nuestras sedes</h2>
+        <button className="home-btn-booking" onClick={() => navigate('/')}><FaHome /></button>
       </div>
       <div className="search-bar-container">
         <FaSearch className="search-icon" />
@@ -122,27 +106,36 @@ const StepSedes = ({ onSelect }) => {
   );
 };
 
-// ─── PASO 2: Detalle de sede ──────────────────────────────────────────────────
-const StepDetalle = ({ sede, onBack, onContinue }) => {
+// ─── PASO 2 ───────────────────────────────────────────────────────────────────
+const StepDetalle = ({ sede, onBack, onContinue, initialServices, initialEspecialista }) => {
   const [activeTab, setActiveTab] = useState('servicios');
   const [openAccordion, setOpenAccordion] = useState(null);
-  const [openEspecialista, setOpenEspecialista] = useState(null);
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedEspecialista, setSelectedEspecialista] = useState(null);
+  const [selectedServices, setSelectedServices] = useState(initialServices || []);
+  const [selectedEspecialista, setSelectedEspecialista] = useState(initialEspecialista || null);
+  const navigate = useNavigate();
+  
+
+  const toggleService = (item) => {
+    setSelectedServices(prev => {
+      const exists = prev.find(s => s.desc === item.desc);
+      if (exists) return prev.filter(s => s.desc !== item.desc);
+      else return [...prev, item];
+    });
+  };
 
   const handleContinue = () => {
-    if (!selectedService) { alert('Por favor selecciona un servicio.'); return; }
+    if (selectedServices.length === 0) { alert('Por favor selecciona al menos un servicio.'); return; }
     if (!selectedEspecialista) { alert('Por favor selecciona un especialista.'); return; }
-    onContinue(selectedService, selectedEspecialista);
+    onContinue(selectedServices, selectedEspecialista);
   };
 
   return (
     <div className="booking-container">
       <div className="booking-header">
-        <button className="back-btn-booking" onClick={onBack}><FaArrowLeft /></button>
-        <h2 className="booking-title-gold">Barber Connect sede {sede.id}</h2>
-        <button className="close-btn-booking" onClick={() => window.history.back()}><FaTimes /></button>
-      </div>
+  <button className="back-btn-booking" onClick={onBack}><FaArrowLeft /></button>
+  <h2 className="booking-title-gold">Barber Connect sede {sede.id}</h2>
+  <button className="home-btn-booking" onClick={() => navigate('/')}><FaHome /></button> 
+</div>
 
       <div className="sede-detalle-top">
         <img src={sede.imagen} alt={sede.nombre} className="sede-detalle-img" />
@@ -152,15 +145,17 @@ const StepDetalle = ({ sede, onBack, onContinue }) => {
         </div>
       </div>
 
-      {/* RESUMEN DE SELECCIÓN */}
-      {(selectedService || selectedEspecialista) && (
+      {(selectedServices.length > 0 || selectedEspecialista) && (
         <div className="seleccion-resumen-bar">
-          {selectedService && (
-            <span>✂️ <strong>{selectedService.desc}</strong> — {selectedService.time} | {selectedService.price}</span>
+          {selectedServices.length > 0 && (
+            <div>
+              <strong>✂️ Servicios ({selectedServices.length}):</strong>
+              {selectedServices.map((s, i) => (
+                <div key={i} className="resumen-servicio-item">• {s.desc} — {s.time} | {s.price}</div>
+              ))}
+            </div>
           )}
-          {selectedEspecialista && (
-            <span>👤 <strong>{selectedEspecialista}</strong></span>
-          )}
+          {selectedEspecialista && <span>👤 <strong>{selectedEspecialista}</strong></span>}
         </div>
       )}
 
@@ -168,10 +163,8 @@ const StepDetalle = ({ sede, onBack, onContinue }) => {
         <button className={`tab-btn ${activeTab === 'servicios' ? 'active' : ''}`} onClick={() => setActiveTab('servicios')}>Servicios</button>
         <button className={`tab-btn ${activeTab === 'especialistas' ? 'active' : ''}`} onClick={() => setActiveTab('especialistas')}>Especialistas</button>
         <button className={`tab-btn ${activeTab === 'informacion' ? 'active' : ''}`} onClick={() => setActiveTab('informacion')}>Información</button>
-        <button className="tab-btn-green">Escríbenos</button>
       </div>
 
-      {/* TAB SERVICIOS */}
       {activeTab === 'servicios' && (
         <div className="tab-content">
           {servicios.map((cat, i) => (
@@ -184,13 +177,16 @@ const StepDetalle = ({ sede, onBack, onContinue }) => {
                 <div className="accordion-body">
                   {cat.items.map((item, idx) => (
                     <div key={idx}
-                      className={`service-row-booking ${selectedService?.desc === item.desc ? 'selected' : ''}`}
-                      onClick={() => { setSelectedService(item); setActiveTab('especialistas'); }}
+                      className={`service-row-booking ${selectedServices.find(s => s.desc === item.desc) ? 'selected' : ''}`}
+                      onClick={() => toggleService(item)}
                     >
                       <div className="service-info">
                         <span className="service-name">{item.desc}</span>
                         <span className="service-time">⏱ {item.time} | 💰 {item.price}</span>
                       </div>
+                      {selectedServices.find(s => s.desc === item.desc) && (
+                        <span className="check-selected">✓</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -200,38 +196,22 @@ const StepDetalle = ({ sede, onBack, onContinue }) => {
         </div>
       )}
 
-      {/* TAB ESPECIALISTAS */}
       {activeTab === 'especialistas' && (
         <div className="tab-content">
           {especialistasData.map((esp, i) => (
             <div key={i} className="accordion-item">
-              <div className={`accordion-header ${selectedEspecialista === esp.nombre ? 'esp-header-selected' : ''}`}
-                onClick={() => setOpenEspecialista(openEspecialista === i ? null : i)}>
+              <div
+                className={`accordion-header ${selectedEspecialista === esp.nombre ? 'esp-header-selected' : ''}`}
+                onClick={() => setSelectedEspecialista(esp.nombre)}
+              >
                 {esp.nombre}
-                {openEspecialista === i ? <HiChevronUp /> : <HiChevronDown />}
+                {selectedEspecialista === esp.nombre && <span style={{color: '#c4a454'}}>✓</span>}
               </div>
-              {openEspecialista === i && (
-                <div className="accordion-body especialista-servicios">
-                  {esp.servicios.map((srv, idx) => (
-                    <div key={idx}
-                      className={`especialista-servicio-card ${selectedEspecialista === esp.nombre ? 'esp-selected' : ''}`}
-                      onClick={() => setSelectedEspecialista(esp.nombre)}
-                    >
-                      <span className="esp-srv-nombre">{srv.desc}</span>
-                      <div className="esp-srv-detalle">
-                        <span>{srv.time}</span>
-                        <span>{srv.price}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
       )}
 
-      {/* TAB INFORMACIÓN */}
       {activeTab === 'informacion' && (
         <div className="tab-content info-content">
           <p><strong>Barber Connect Sede {sede.id}</strong></p>
@@ -252,8 +232,8 @@ const StepDetalle = ({ sede, onBack, onContinue }) => {
   );
 };
 
-// ─── PASO 3: Fecha y hora ─────────────────────────────────────────────────────
-const StepFecha = ({ sede, servicio, especialista, onBack, onContinue }) => {
+// ─── PASO 3 ───────────────────────────────────────────────────────────────────
+const StepFecha = ({ servicios: serviciosSeleccionados, especialista, onBack, onContinue }) => {
   const hoy = new Date();
   const [mes, setMes] = useState(hoy.getMonth());
   const [anio, setAnio] = useState(hoy.getFullYear());
@@ -261,10 +241,13 @@ const StepFecha = ({ sede, servicio, especialista, onBack, onContinue }) => {
   const [hora, setHora] = useState('08');
   const [minuto, setMinuto] = useState('00');
   const [ampm, setAmpm] = useState('AM');
+  const navigate = useNavigate();
+  
 
   const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const diasEnMes = new Date(anio, mes + 1, 0).getDate();
   const primerDia = new Date(anio, mes, 1).getDay();
+  
 
   const prevMes = () => { if (mes === 0) { setMes(11); setAnio(anio - 1); } else setMes(mes - 1); };
   const nextMes = () => { if (mes === 11) { setMes(0); setAnio(anio + 1); } else setMes(mes + 1); };
@@ -281,10 +264,10 @@ const StepFecha = ({ sede, servicio, especialista, onBack, onContinue }) => {
   return (
     <div className="booking-container">
       <div className="booking-header">
-        <button className="back-btn-booking" onClick={onBack}><FaArrowLeft /></button>
-        <h2 className="booking-title-gold">Selecciona fecha y hora</h2>
-        <button className="close-btn-booking"><FaTimes /></button>
-      </div>
+  <button className="back-btn-booking" onClick={onBack}><FaArrowLeft /></button>
+  <h2 className="booking-title-gold">Selecciona fecha y hora</h2>
+  <button className="home-btn-booking" onClick={() => navigate('/')}><FaHome /></button>
+</div>
 
       <div className="fecha-hora-container">
         <div className="calendario">
@@ -326,10 +309,12 @@ const StepFecha = ({ sede, servicio, especialista, onBack, onContinue }) => {
         </div>
       </div>
 
-      {/* BARRA CON SERVICIO Y ESPECIALISTA */}
       <div className="servicio-seleccionado-bar">
-        <div>✂️ <strong>Servicio:</strong> {servicio.desc} — {servicio.time} | {servicio.price}</div>
-        <div>👤 <strong>Especialista:</strong> {especialista}</div>
+        <div><strong>✂️ Servicios ({serviciosSeleccionados.length}):</strong></div>
+        {serviciosSeleccionados.map((s, i) => (
+          <div key={i} className="resumen-servicio-item">• {s.desc} — {s.time} | {s.price}</div>
+        ))}
+        <div style={{marginTop: '8px'}}>👤 <strong>Especialista:</strong> {especialista}</div>
       </div>
 
       <button className="btn-continuar" onClick={handleContinue}>Continuar</button>
@@ -337,36 +322,63 @@ const StepFecha = ({ sede, servicio, especialista, onBack, onContinue }) => {
   );
 };
 
-// ─── PASO 4: Confirmar reserva ────────────────────────────────────────────────
-const StepConfirmar = ({ sede, servicio, especialista, fecha, hora, onBack }) => {
+// ─── PASO 4 ───────────────────────────────────────────────────────────────────
+const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, fecha, hora, onBack, citaEditandoId }) => {
   const navigate = useNavigate();
+  const { agregarCita, modificarCita } = useAuth();
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = () => {
-    alert('¡Reserva confirmada!');
-    navigate('/');
+    const datosCita = {
+      sede: `Barber Connect Sede ${sede.id}`,
+      sedeId: sede.id,
+      especialista,
+      servicios: serviciosSeleccionados.map(s => s.desc),
+      serviciosCompletos: serviciosSeleccionados,
+      fecha,
+      hora,
+      notas,
+      total: serviciosSeleccionados.reduce((acc, s) => {
+        const num = parseInt(s.price.replace(/\./g, '').replace('$', ''));
+        return acc + (isNaN(num) ? 0 : num);
+      }, 0).toLocaleString('es-CO') + ' COP',
+    };
+
+    if (citaEditandoId) {
+      modificarCita(citaEditandoId, { ...datosCita, estado: 'Pendiente' });
+      alert('¡Cita modificada exitosamente!');
+    } else {
+      agregarCita(datosCita);
+      alert('¡Reserva confirmada!');
+    }
+    navigate('/historial');
   };
 
   return (
     <div className="booking-container">
       <div className="booking-header">
-        <button className="back-btn-booking" onClick={onBack}><FaArrowLeft /></button>
-        <h2 className="booking-title-gold">Tu reserva</h2>
-        <button className="close-btn-booking" onClick={() => navigate('/')}><FaTimes /></button>
-      </div>
+  <button className="back-btn-booking" onClick={onBack}><FaArrowLeft /></button>
+  <h2 className="booking-title-gold">Barber Connect sede {sede.id}</h2>
+  <button className="home-btn-booking" onClick={() => navigate('/')}><FaHome /></button> 
+</div>
 
       <div className="confirmar-content">
         <p><strong>El {fecha}</strong></p>
         <p>En Barber Connect Sede {sede.id}</p>
-        <p><strong>Total {servicio.price} ({servicio.time})</strong></p>
+        <p><strong>Total: {serviciosSeleccionados.reduce((acc, s) => {
+          const num = parseInt(s.price.replace(/\./g, '').replace('$', ''));
+          return acc + (isNaN(num) ? 0 : num);
+        }, 0).toLocaleString('es-CO')} COP</strong></p>
 
         <h4>Servicios seleccionados</h4>
-        <div className="servicio-resumen">
-          <p><strong>{servicio.desc} ({servicio.time})</strong></p>
-          <p>{servicio.price}</p>
-          <p>👤 {especialista}</p>
-          <p>🕐 {hora}</p>
-        </div>
+        {serviciosSeleccionados.map((s, i) => (
+          <div key={i} className="servicio-resumen">
+            <p><strong>{s.desc} ({s.time})</strong></p>
+            <p>{s.price}</p>
+          </div>
+        ))}
+        <p>👤 <strong>Especialista:</strong> {especialista}</p>
+        <p>🕐 <strong>Hora:</strong> {hora}</p>
 
         <h4>Notas de Reserva</h4>
         <textarea className="notas-input" placeholder="Notas de reserva"
@@ -378,27 +390,57 @@ const StepConfirmar = ({ sede, servicio, especialista, fecha, hora, onBack }) =>
         </div>
       </div>
 
-      <button className="btn-continuar" onClick={handleConfirmar}>Confirmar reserva</button>
+      <button className="btn-continuar" onClick={handleConfirmar}>
+        {citaEditandoId ? 'Guardar cambios' : 'Confirmar reserva'}
+      </button>
     </div>
   );
 };
 
 // ─── COMPONENTE PRINCIPAL ─────────────────────────────────────────────────────
 const BookingPage = () => {
-  const [step, setStep] = useState(1);
-  const [sedeSeleccionada, setSedeSeleccionada] = useState(null);
-  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
-  const [especialistaSeleccionado, setEspecialistaSeleccionado] = useState(null);
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
-  const [horaSeleccionada, setHoraSeleccionada] = useState(null);
+  const location = useLocation();
+  const citaEditar = location.state?.citaEditar || null;
+
+  const [step, setStep] = useState(citaEditar ? 2 : 1);
+  const [sedeSeleccionada, setSedeSeleccionada] = useState(citaEditar?.sedeObj || null);
+  const [serviciosSeleccionados, setServiciosSeleccionados] = useState(citaEditar?.serviciosCompletos || []);
+  const [especialistaSeleccionado, setEspecialistaSeleccionado] = useState(citaEditar?.especialista || null);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(citaEditar?.fecha || null);
+  const [horaSeleccionada, setHoraSeleccionada] = useState(citaEditar?.hora || null);
+  const [citaEditandoId] = useState(citaEditar?.id || null);
 
   if (step === 1) return <StepSedes onSelect={(sede) => { setSedeSeleccionada(sede); setStep(2); }} />;
-  if (step === 2) return <StepDetalle sede={sedeSeleccionada} onBack={() => setStep(1)}
-    onContinue={(servicio, especialista) => { setServicioSeleccionado(servicio); setEspecialistaSeleccionado(especialista); setStep(3); }} />;
-  if (step === 3) return <StepFecha sede={sedeSeleccionada} servicio={servicioSeleccionado} especialista={especialistaSeleccionado}
-    onBack={() => setStep(2)} onContinue={({ fecha, hora }) => { setFechaSeleccionada(fecha); setHoraSeleccionada(hora); setStep(4); }} />;
-  if (step === 4) return <StepConfirmar sede={sedeSeleccionada} servicio={servicioSeleccionado} especialista={especialistaSeleccionado}
-    fecha={fechaSeleccionada} hora={horaSeleccionada} onBack={() => setStep(3)} />;
+  if (step === 2) return <StepDetalle 
+    sede={sedeSeleccionada} 
+    onBack={() => setStep(1)}
+    initialServices={serviciosSeleccionados}
+    initialEspecialista={especialistaSeleccionado}
+    onContinue={(servicios, especialista) => { 
+      setServiciosSeleccionados(servicios); 
+      setEspecialistaSeleccionado(especialista); 
+      setStep(3); 
+    }} 
+  />;
+  if (step === 3) return <StepFecha 
+    servicios={serviciosSeleccionados} 
+    especialista={especialistaSeleccionado}
+    onBack={() => setStep(2)} 
+    onContinue={({ fecha, hora }) => { 
+      setFechaSeleccionada(fecha); 
+      setHoraSeleccionada(hora); 
+      setStep(4); 
+    }} 
+  />;
+  if (step === 4) return <StepConfirmar 
+    sede={sedeSeleccionada} 
+    servicios={serviciosSeleccionados} 
+    especialista={especialistaSeleccionado}
+    fecha={fechaSeleccionada} 
+    hora={horaSeleccionada} 
+    onBack={() => setStep(3)}
+    citaEditandoId={citaEditandoId}
+  />;
 };
 
 export default BookingPage;

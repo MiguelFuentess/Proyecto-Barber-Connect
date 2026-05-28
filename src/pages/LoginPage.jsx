@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
-import { useAuth } from '../context/AuthContext'; // ← corregido el path
+import { useAuth } from '../context/AuthContext'; 
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth(); // ← corregido, destructuring del objeto
+  const { login } = useAuth(); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);

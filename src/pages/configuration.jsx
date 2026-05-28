@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../components/sidebar";
 
 const Configuracion = () => {
-  // Aquí defines tus estilos (puedes mover esto a un archivo .css luego)
+  
   const styles = {
     pageContainer: {
       display: "flex",
@@ -42,10 +42,9 @@ const Configuracion = () => {
 
   return (
     <div style={styles.pageContainer}>
-      <Sidebar /> {/* 1. El Sidebar siempre a la izquierda */}
+      <Sidebar /> 
       <main style={styles.main}>
         {" "}
-        {/* 2. El contenido a la derecha */}
         <h1
           style={{ color: "#d4af37", fontSize: "48px", marginBottom: "40px" }}
         >
