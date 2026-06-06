@@ -341,7 +341,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
       const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
       
       // Usamos el token activo que guardaste en Swagger directamente
-      const tokenDeRespaldo = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMWQwNzQwMC1lZTc0LTRkOTMtOTg5Ni0yZTE2MDY4ODkzMTQiLCJlbWFpbCI6ImplYW5AZ21haWwuY29tIiwicm9sZXMiOlsiQ0xJRU5UIl0sImNvbXBhbnlJZCI6IjZiYzllMTE4LTk5YzItNGM0Ni1hYTg2LTVhYTBlNDc0OWI3YyIsImlhdCI6MTc4MDc3NTU5OSwiZXhwIjoxNzgwNzc2NDk5fQ._bHydFCqw0rY7XPer2Yx3L3LBFyDTp4QWczGoIVn0hA";
+      const tokenDeRespaldo = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMWQwNzQwMC1lZTc0LTRkOTMtOTg5Ni0yZTE2MDY4ODkzMTQiLCJlbWFpbCI6ImplYW5AZ21haWwuY29tIiwicm9sZXMiOlsiQ0xJRU5UIl0sImNvbXBhbnlJZCI6IjZiYzllMTE4LTk5YzItNGM0Ni1hYTg2LTVhYTBlNDc0OWI3YyIsImlhdCI6MTc4MDc3ODgzOSwiZXhwIjoxNzgwNzc5NzM5fQ.LF9odhng8KLFxAPot7Lx6ug1r2F1keRW38VA6SCqo2k";
       const tokenFinal = user?.accessToken || tokenDeRespaldo;
 
       const respuesta = await fetch(`${API_URL}/api/appointments`, {
