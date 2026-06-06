@@ -363,6 +363,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
         status: 'PENDING',
         companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c'
       })
+    });
 
     const datos = await respuesta.json();
 
