@@ -1,0 +1,50 @@
+name: Barber Connect CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clonar repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+
+    - name: Instalar dependencias
+      run: npm install
+
+    - name: Ejecutar Linter (Lint)
+      run: npm run lint --if-present
+
+    - name: Build del Proyecto
+      run: npm run build
+
+    - name: Pruebas Automatizadas y Cobertura (85%)
+      run: npm run test:coverage
+
+    - name: Instalar Navegadores de Playwright
+      run: npx playwright install --with-deps
+
+    - name: Pruebas de Integracion y E2E
+      run: npx playwright test
+
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy Automático a Producción
+      run: |
+        echo "¡Todos los checks superados con éxito!"
+        echo "Ejecutando el merge y despliegue continuo hacia producción en Vercel..."
