@@ -1,9 +1,8 @@
-// playwright.config.js
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   webServer: {
-    command: 'npm start', // Asegúrate de que este comando inicie tu app
+    command: 'npm run start',
     url: 'http://localhost:3000',
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
