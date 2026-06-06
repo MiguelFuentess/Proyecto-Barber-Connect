@@ -340,7 +340,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
     }
 
     // Petición nativa directa al endpoint correcto
-    const respuesta = await fetch(`${API_URL}/api/appointments`, {
+    const respuesta = await fetchConToken(`${API_URL}/api/appointments`, {
       method: 'POST', //
       headers: {
         'Content-Type': 'application/json',
