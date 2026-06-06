@@ -326,20 +326,28 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = async () => {
-    const datosCita = {
-      sede: `Barber Connect Sede ${sede.id}`,
-      sedeId: sede.id,
-      especialista,
-      servicios: serviciosSeleccionados.map(s => s.desc),
-      serviciosCompletos: serviciosSeleccionados,
-      fecha,
-      hora,
-      notas,
-      total: serviciosSeleccionados.reduce((acc, s) => {
-        const num = parseInt(s.price.replace(/\./g, '').replace('$', ''));
-        return acc + (isNaN(num) ? 0 : num);
-      }, 0).toLocaleString('es-CO') + ' COP',
-    };
+  try {
+    const respuesta = await fetch(`${API_URL}/appointments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user?.token}`,
+      },
+      body: JSON.stringify({
+        clientId: user?.clientId,        // ← UUID del cliente
+        employeeId: user?.employeeId,    // ← UUID del especialista
+        branchId: sede.branchId,         // ← UUID de la sede
+        appointmentDate: fechaISO,       // ← formato YYYY-MM-DD
+        startTime: horaFormato,          // ← formato HH:MM
+        endTime: horaFinFormato,         // ← formato HH:MM
+        services: serviciosSeleccionados.map(s => ({
+          serviceId: s.id,
+          quantity: 1
+        })),
+        status: 'PENDING',
+        companyId: user?.companyId,
+      }),
+    });
 
     try {
       if (citaEditandoId) {
