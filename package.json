@@ -17,7 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test:coverage": "react-scripts test --env=jsdom --coverage --watchAll=false --collectCoverageFrom=src/components/sidebar.test.jsx --coverageThreshold=\"{\\\"global\\\":{\\\"branches\\\":85,\\\"functions\\\":85,\\\"lines\\\":85,\\\"statements\\\":85}}\"",
+    "test:coverage": "react-scripts test --env=jsdom --coverage --watchAll=false --collectCoverageFrom=src/components/sidebar.jsx --coverageThreshold=\"{\\\"global\\\":{\\\"branches\\\":85,\\\"functions\\\":85,\\\"lines\\\":85,\\\"statements\\\":85}}\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -28,7 +28,7 @@
   },
   "browserslist": {
     "production": [
-      "h0.2%",
+      ">0.2%",
       "not dead",
       "not op_mini all"
     ],

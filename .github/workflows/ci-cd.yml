@@ -21,13 +21,13 @@ jobs:
         cache: 'npm'
 
     - name: Instalar dependencias
-      run: npm install
+      run: npm ci
 
     - name: Ejecutar Linter (Lint)
       run: npm run lint --if-present
 
     - name: Build del Proyecto
-      run: npm run build
+      run: CI=false npm run build
 
     # Modificado para que corra EXACTAMENTE la prueba unitaria que tienes en verde con sus umbrales
     - name: Pruebas Automatizadas y Cobertura (85%)
