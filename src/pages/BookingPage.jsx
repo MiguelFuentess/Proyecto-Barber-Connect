@@ -330,8 +330,8 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
       const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
 
       if (citaEditandoId) {
-        const respuesta = await fetchConToken(`${API_URL}/appointments`, {
-          method: 'PATCH',
+        const respuesta = await fetchConToken(`${API_URL}/api/appointments`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user?.token}`,
