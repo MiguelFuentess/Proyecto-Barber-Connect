@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'; // ← agrega useEffect y useState
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import './HistorialPage.css';
+import API_URL from '../config';
 
 const sedes = [
   { id: 1, nombre: 'Medellín', direccion: 'Calle 52 a 94 20', imagen: 'https://images.pexels.com/photos/9146943/pexels-photo-9146943.jpeg' },
@@ -13,30 +14,85 @@ const sedes = [
 const HistorialPage = () => {
   const navigate = useNavigate();
   const { user, citas, cancelarCita } = useAuth();
+  const [citasBackend, setCitasBackend] = useState([]); // ← citas del backend
+  const [cargando, setCargando] = useState(true);
 
-  const handleCancelar = (id) => {
+  // ← Carga las citas del backend al entrar
+  useEffect(() => {
+    const obtenerCitas = async () => {
+      try {
+        const respuesta = await fetch(`${API_URL}/citas`, {
+          headers: {
+            'Authorization': `Bearer ${user?.token}`,
+          },
+        });
+
+        if (!respuesta.ok) throw new Error('Error al obtener citas');
+
+        const datos = await respuesta.json();
+        setCitasBackend(datos);
+      } catch (error) {
+        console.error('Error al cargar citas:', error);
+        // Si falla el backend, usa las citas locales del contexto
+        setCitasBackend(citas);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    obtenerCitas();
+  }, [user?.token]);
+
+  const handleCancelar = async (id) => {
     if (window.confirm('¿Estás seguro de que quieres cancelar esta cita?')) {
-      cancelarCita(id);
+      try {
+        const respuesta = await fetch(`${API_URL}/citas/${id}/cancelar`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${user?.token}`,
+          },
+        });
+
+        if (!respuesta.ok) throw new Error('Error al cancelar la cita');
+
+        // Actualiza localmente también
+        cancelarCita(id);
+        setCitasBackend(prev => prev.map(c => c.id === id ? { ...c, estado: 'Cancelada' } : c));
+
+      } catch (error) {
+        alert(error.message || 'Error al cancelar la cita.');
+      }
     }
   };
 
   const handleModificar = (cita) => {
-    // Busca el objeto sede completo para precargarlo
     const sedeObj = sedes.find(s => cita.sede.includes(`Sede ${s.id}`));
-    navigate('/booking', { 
-      state: { 
-        citaEditar: { 
-          ...cita, 
-          sedeObj: { ...sedeObj, 
+    navigate('/booking', {
+      state: {
+        citaEditar: {
+          ...cita,
+          sedeObj: {
+            ...sedeObj,
             ciudad: sedeObj?.nombre,
             telefono: '(+57) 3222056788',
             horario: { lunes: '9:30 am - 8:00 pm', martes: '9:30 am - 8:00 pm', miercoles: '9:30 am - 8:00 pm', jueves: '9:30 am - 8:00 pm', viernes: '9:30 am - 8:00 pm', sabado: '9:30 am - 8:00 pm', domingo: '10:00 am - 4:00 pm' },
             especialistas: ['Wilmer Andres Chaparro', 'Kevin Rojas', 'Dauly Velasquez', 'Carmen Rodriguez'],
           }
-        } 
-      } 
+        }
+      }
     });
   };
+
+  // Lista a mostrar: backend si cargó, local si falló
+  const citasAMostrar = citasBackend.length > 0 ? citasBackend : citas;
+
+  if (cargando) {
+    return (
+      <div className="historial-container">
+        <p style={{color: '#c4a454', textAlign: 'center', marginTop: '50px'}}>Cargando citas...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="historial-container">
@@ -49,14 +105,14 @@ const HistorialPage = () => {
 
       <p className="historial-usuario">Usuario: <strong>{user?.nombre}</strong></p>
 
-      {citas.length === 0 ? (
+      {citasAMostrar.length === 0 ? (
         <div className="historial-empty">
           <p>No tienes citas registradas aún.</p>
           <button className="btn-agendar" onClick={() => navigate('/booking')}>Agendar cita</button>
         </div>
       ) : (
         <div className="citas-list">
-          {citas.map(cita => (
+          {citasAMostrar.map(cita => (
             <div key={cita.id} className="cita-card">
               <div className="cita-header">
                 <span className="cita-fecha">📅 {cita.fecha} — {cita.hora}</span>
@@ -72,7 +128,6 @@ const HistorialPage = () => {
                 {cita.notas && <p>📝 <strong>Notas:</strong> {cita.notas}</p>}
               </div>
 
-              {/* BOTONES solo si no está cancelada */}
               {cita.estado !== 'Cancelada' && (
                 <div className="cita-actions">
                   <button className="btn-modificar" onClick={() => handleModificar(cita)}>
