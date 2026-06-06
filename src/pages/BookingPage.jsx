@@ -322,7 +322,7 @@ const StepFecha = ({ servicios: serviciosSeleccionados, especialista, onBack, on
 // ─── PASO 4 ───────────────────────────────────────────────────────────────────
 const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, fecha, hora, onBack, citaEditandoId }) => {
   const navigate = useNavigate();
-  const { agregarCita, modificarCita, user fetchConToken } = useAuth();
+  const { agregarCita, modificarCita, user, fetchConToken } = useAuth();
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = async () => {
