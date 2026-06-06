@@ -346,10 +346,16 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${tokenFinal}` //
       },
-      body: JSON.stringify({
-        clientId: '11d07400-ee74-4d93-9896-2e1606b89314', // Usamos el ID de cliente real de tu Swagger
+     body: JSON.stringify({
+        // Corregido: Termina en 889314 para que coincida exactamente con tu usuario de Swagger
+        clientId: '11d07400-ee74-4d93-9896-2e1606889314', 
+        
+        // ID del Super Admin que actúa como empleado activo
         employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
-        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
+        
+        // Corregido: Limpiado el ID duplicado. Debe quedar solo una vez
+        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c', 
+        
         appointmentDate: new Date().toISOString().split('T')[0],
         startTime: horaLimpia,
         endTime: horaLimpia,
@@ -357,7 +363,6 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
         status: 'PENDING',
         companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c'
       })
-    });
 
     const datos = await respuesta.json();
 
