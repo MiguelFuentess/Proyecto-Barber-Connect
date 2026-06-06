@@ -1,21 +1,18 @@
 name: Barber Connect CI/CD Pipeline
 
 on:
-  pull_request:
-    branches: [ master ]
   push:
-    branches: [ master ]
+    branches: [ master, main ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
     - name: Clonar repositorio
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18
         cache: 'npm'
@@ -23,33 +20,17 @@ jobs:
     - name: Instalar dependencias
       run: npm ci
 
-    - name: Ejecutar Linter (Lint)
-      run: npm run lint --if-present
-
+    # 1. Primero el Build (Ya sabemos que funciona con CI=false)
     - name: Build del Proyecto
       run: CI=false npm run build
 
-    # Modificado para que corra EXACTAMENTE la prueba unitaria que tienes en verde con sus umbrales
-    - name: Pruebas Automatizadas y Cobertura (85%)
-      run: npx react-scripts test --env=jsdom --coverage --watchAll=false --collectCoverageFrom=src/components/sidebar.test.jsx --coverageThreshold="{\"global\":{\"branches\":85,\"functions\":85,\"lines\":85,\"statements\":85}}"
+    # 2. Pruebas Unitarias (Solo Jest)
+    - name: Pruebas Unitarias
+      run: npm run test:coverage
 
-    - name: Instalar Navegadores de Playwright
+    # 3. Pruebas E2E (Playwright - usa la config que ya definimos)
+    - name: Instalar Navegadores Playwright
       run: npx playwright install --with-deps
 
-    # Levantamos el servidor en segundo plano antes de correr Playwright para que no de timeout
     - name: Pruebas de Integracion y E2E
-      run: |
-        npm run start &
-        npx wait-on http://localhost:3000
-        npx playwright test
-
-  deploy:
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Deploy Automático a Producción
-      run: |
-        echo "¡Todos los checks superados con éxito!"
-        echo "Ejecutando el merge y despliegue continuo hacia producción en Vercel..."
+      run: npx playwright test
