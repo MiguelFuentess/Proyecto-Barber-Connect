@@ -340,22 +340,20 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
     }
 
     // Petición nativa directa al endpoint correcto
-    const respuesta = await fetchConToken(`${API_URL}/api/appointments`, {
-      method: 'POST', //
+    // 1. Extraemos el token directamente de la sesión activa del usuario
+    const tokenSeguro = user?.token;
+
+    // 2. Hacemos la petición nativa inyectando el Bearer manualmente
+    const respuesta = await fetch(`${API_URL}/api/appointments`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${tokenFinal}` //
+        'Authorization': `Bearer ${tokenSeguro}` // Asegura que el token viaje de forma explícita
       },
-     body: JSON.stringify({
-        // Corregido: Termina en 889314 para que coincida exactamente con tu usuario de Swagger
-        clientId: '11d07400-ee74-4d93-9896-2e1606889314', 
-        
-        // ID del Super Admin que actúa como empleado activo
+      body: JSON.stringify({
+        clientId: '11d07400-ee74-4d93-9896-2e1606889314',
         employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
-        
-        // Corregido: Limpiado el ID duplicado. Debe quedar solo una vez
-        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c', 
-        
+        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
         appointmentDate: new Date().toISOString().split('T')[0],
         startTime: horaLimpia,
         endTime: horaLimpia,
