@@ -326,25 +326,56 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = async () => {
-    const datosCita = {
-      sede: `Barber Connect Sede ${sede.id}`,
-      sedeId: sede.id,
-      especialista,
+  try {
+    const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
+
+    const respuesta = await fetch(`${API_URL}/appointments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user?.token}`,
+      },
+      body: JSON.stringify({
+        clientId: 'b0920726-d7c7-4116-98a0-433bcde30676',
+        employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
+        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
+        appointmentDate: new Date().toISOString().split('T')[0],
+        startTime: horaLimpia,
+        endTime: horaLimpia,
+        services: [{ 
+          serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', 
+          quantity: 1 
+        }],
+        status: 'PENDING',
+        companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c',
+      }),
+    });
+
+    if (!respuesta.ok) {
+      const error = await respuesta.json();
+      throw new Error(error.message || 'Error al crear la cita');
+    }
+
+    const citaCreada = await respuesta.json();
+    agregarCita({ 
+      ...citaCreada,
+      sede: `Barber Connect Sede 1`,
+      especialista: especialista,
       servicios: serviciosSeleccionados.map(s => s.desc),
-      serviciosCompletos: serviciosSeleccionados,
-      fecha,
-      hora,
-      notas,
-      total: serviciosSeleccionados.reduce((acc, s) => {
-        const num = parseInt(s.price.replace(/\./g, '').replace('$', ''));
-        return acc + (isNaN(num) ? 0 : num);
-      }, 0).toLocaleString('es-CO') + ' COP',
-    };
+      fecha, hora 
+    });
+    alert('¡Reserva confirmada!');
+    navigate('/historial');
+
+  } catch (error) {
+    alert(error.message || 'Error al conectar con el servidor.');
+  }
+};
 
     try {
       if (citaEditandoId) {
         // ← PATCH /api/appointments/{id}
-        const respuesta = await fetch(`${API_URL}/appointments/${citaEditandoId}`, {
+        const respuesta = await fetch(`${API_URL}/api/appointments/${citaEditandoId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -359,7 +390,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
 
       } else {
         // ← POST /api/appointments
-        const respuesta = await fetch(`${API_URL}/appointments`, {
+        const respuesta = await fetch(`${API_URL}/api/appointments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
