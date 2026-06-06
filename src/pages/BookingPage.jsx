@@ -322,7 +322,7 @@ const StepFecha = ({ servicios: serviciosSeleccionados, especialista, onBack, on
 // ─── PASO 4 ───────────────────────────────────────────────────────────────────
 const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, fecha, hora, onBack, citaEditandoId }) => {
   const navigate = useNavigate();
-  const { agregarCita, modificarCita, user } = useAuth();
+  const { agregarCita, modificarCita, user fetchConToken } = useAuth();
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = async () => {
@@ -330,7 +330,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
       const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
 
       if (citaEditandoId) {
-        const respuesta = await fetch(`${API_URL}/api/appointments/${citaEditandoId}`, {
+        const respuesta = await fetchConToken(`${API_URL}/appointments`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
