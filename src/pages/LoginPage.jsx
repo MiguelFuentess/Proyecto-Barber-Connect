@@ -37,10 +37,14 @@ const LoginPage = () => {
 
       // Guardamos la sesión en tu contexto global de React
       login({ 
-        nombre: datos.username || username, 
-        role: datos.role || role, // Usamos el rol que nos devuelva el backend o el del botón
-        token: datos.token
-      });
+  nombre: datos.user?.firstName || username,
+  email: datos.user?.email,
+  role: datos.user?.roles?.[0] || role,
+  token: datos.accessToken, // ← antes era datos.token
+  refreshToken: datos.refreshToken,
+  id: datos.user?.id,
+  companyId: datos.user?.companyId, // ← importante para las citas
+});
 
       if (role === 'admin') {
         navigate('/configuration');
