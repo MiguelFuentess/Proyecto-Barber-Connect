@@ -29,14 +29,18 @@ jobs:
     - name: Build del Proyecto
       run: npm run build
 
+    # Modificado para que corra EXACTAMENTE la prueba unitaria que tienes en verde con sus umbrales
     - name: Pruebas Automatizadas y Cobertura (85%)
-      run: npm run test:coverage
+      run: npx react-scripts test --env=jsdom --coverage --watchAll=false --collectCoverageFrom=src/components/sidebar.test.jsx --coverageThreshold="{\"global\":{\"branches\":85,\"functions\":85,\"lines\":85,\"statements\":85}}"
 
     - name: Instalar Navegadores de Playwright
       run: npx playwright install --with-deps
 
+    # Levantamos el servidor en segundo plano antes de correr Playwright para que no de timeout
     - name: Pruebas de Integracion y E2E
-      run: npx playwright test
+      run: |
+        npm run start &
+        npx playwright test
 
   deploy:
     needs: build-and-test
