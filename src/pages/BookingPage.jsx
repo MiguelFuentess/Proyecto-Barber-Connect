@@ -344,7 +344,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
     try {
       if (citaEditandoId) {
         // ← PATCH /api/appointments/{id}
-        const respuesta = await fetch(`${API_URL}/appointments/${citaEditandoId}`, {
+        const respuesta = await fetch(`${API_URL}/api/appointments/${citaEditandoId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -359,7 +359,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
 
       } else {
         // ← POST /api/appointments
-        const respuesta = await fetch(`${API_URL}/appointments`, {
+        const respuesta = await fetch(`${API_URL}/api/appointments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
