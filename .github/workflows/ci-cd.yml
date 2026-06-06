@@ -38,9 +38,7 @@ jobs:
 
     # Levantamos el servidor en segundo plano antes de correr Playwright para que no de timeout
     - name: Pruebas de Integracion y E2E
-      run: |
-        npm run start &
-        npx playwright test
+      run: npx playwright test
 
   deploy:
     needs: build-and-test
