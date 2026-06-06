@@ -330,7 +330,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
       const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
 
       if (citaEditandoId) {
-        const respuesta = await fetch(`${API_URL}/appointments/${citaEditandoId}`, {
+        const respuesta = await fetch(`${API_URL}/api/appointments/${citaEditandoId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -353,7 +353,7 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
         alert('¡Cita modificada exitosamente!');
 
       } else {
-        const respuesta = await fetch(`${API_URL}/appointments`, {
+        const respuesta = await fetch(`${API_URL}/api/appointments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
