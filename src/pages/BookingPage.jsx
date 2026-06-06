@@ -329,22 +329,25 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
   try {
     const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
 
-    // ¡EL GRAN CAMBIO!: Usamos .accessToken que es el nombre real que te da el backend
-    const tokenReal = user?.accessToken; 
+    // ¡PEGA AQUÍ EL TOKEN LARGO DE SWAGGER ENTRE LAS COMILLAS!
+    const tokenCopiadoDeSwagger = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMWQwNzQwMC1lZTc0LTRkOTMtOTg5Ni0yZTE2MDY4ODkzMTQiLCJlbWFpbCI6ImplYW5AZ21haWwuY29tIiwicm9sZXMiOlsiQ0xJRU5UIl0sImNvbXBhbnlJZCI6IjZiYzllMTE4LTk5YzItNGM0Ni1hYTg2LTVhYTBlNDc0OWI3YyIsImlhdCI6MTc4MDc3NTU5OSwiZXhwIjoxNzgwNzc2NDk5fQ._bHydFCqw0rY7XPer2Yx3L3LBFyDTp4QWczGoIVn0hA"; 
 
-    if (!tokenReal) {
-      throw new Error("No hay una sesión activa con token. Por favor, vuelve a iniciar sesión.");
+    // Usamos el token manual para asegurar que viaje sí o sí
+    const tokenFinal = tokenCopiadoDeSwagger || user?.accessToken;
+
+    if (!tokenFinal || tokenFinal.includes("AQUI")) {
+      throw new Error("Por favor, pega un token válido de Swagger en la variable tokenCopiadoDeSwagger.");
     }
 
-    // Usamos fetch nativo para asegurarnos de que los headers vayan limpios
+    // Petición nativa directa al endpoint correcto
     const respuesta = await fetch(`${API_URL}/api/appointments`, {
       method: 'POST', //
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${tokenReal}` // Ahora sí viajará el string del token real
+        'Authorization': `Bearer ${tokenFinal}` //
       },
       body: JSON.stringify({
-        clientId: user?.id || 'b0920726-d7c7-4116-98a0-433bcde30676',
+        clientId: '11d07400-ee74-4d93-9896-2e1606b89314', // Usamos el ID de cliente real de tu Swagger
         employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
         branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
         appointmentDate: new Date().toISOString().split('T')[0],
