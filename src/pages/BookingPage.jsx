@@ -326,73 +326,49 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = async () => {
-    try {
-      const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
+  try {
+    const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
 
-      if (citaEditandoId) {
-        const respuesta = await fetchConToken(`${API_URL}/api/appointments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user?.token}`,
-          },
-          body: JSON.stringify({
-            clientId: 'b0920726-d7c7-4116-98a0-433bcde30676',
-            employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
-            branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
-            appointmentDate: new Date().toISOString().split('T')[0],
-            startTime: horaLimpia,
-            endTime: horaLimpia,
-            services: [{ serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', quantity: 1 }],
-            status: 'PENDING',
-            companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c',
-          }),
-        });
-        if (!respuesta.ok) throw new Error('Error al modificar la cita');
-        modificarCita(citaEditandoId, { estado: 'Pendiente', fecha, hora, especialista });
-        alert('¡Cita modificada exitosamente!');
+    // ¡EL GRAN CAMBIO!: Usamos .accessToken que es el nombre real que te da el backend
+    const tokenReal = user?.accessToken; 
 
-      } else {
-        const respuesta = await fetch(`${API_URL}/api/appointments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user?.token}`,
-          },
-          body: JSON.stringify({
-            clientId: 'b0920726-d7c7-4116-98a0-433bcde30676',
-            employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
-            branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
-            appointmentDate: new Date().toISOString().split('T')[0],
-            startTime: horaLimpia,
-            endTime: horaLimpia,
-            services: [{ serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', quantity: 1 }],
-            status: 'PENDING',
-            companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c',
-          }),
-        });
-        if (!respuesta.ok) {
-          const error = await respuesta.json();
-          throw new Error(error.message || 'Error al crear la cita');
-        }
-        const citaCreada = await respuesta.json();
-        agregarCita({
-          ...citaCreada,
-          sede: `Barber Connect Sede 1`,
-          especialista,
-          servicios: serviciosSeleccionados.map(s => s.desc),
-          fecha,
-          hora
-        });
-        alert('¡Reserva confirmada!');
-      }
-
-      navigate('/historial');
-
-    } catch (error) {
-      alert(error.message || 'Error al conectar con el servidor.');
+    if (!tokenReal) {
+      throw new Error("No hay una sesión activa con token. Por favor, vuelve a iniciar sesión.");
     }
-  };
+
+    // Usamos fetch nativo para asegurarnos de que los headers vayan limpios
+    const respuesta = await fetch(`${API_URL}/api/appointments`, {
+      method: 'POST', //
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenReal}` // Ahora sí viajará el string del token real
+      },
+      body: JSON.stringify({
+        clientId: user?.id || 'b0920726-d7c7-4116-98a0-433bcde30676',
+        employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
+        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
+        appointmentDate: new Date().toISOString().split('T')[0],
+        startTime: horaLimpia,
+        endTime: horaLimpia,
+        services: [{ serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', quantity: 1 }],
+        status: 'PENDING',
+        companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c'
+      })
+    });
+
+    const datos = await respuesta.json();
+
+    if (!respuesta.ok) {
+      throw new Error(datos.message || 'Error en el servidor al crear la cita');
+    }
+
+    alert("¡Cita agendada con éxito!");
+    navigate('/'); 
+
+  } catch (error) {
+    alert(error.message || "Error al agendar la cita.");
+  }
+};
 
   return (
     <div className="booking-container">
