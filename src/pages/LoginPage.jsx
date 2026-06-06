@@ -19,7 +19,7 @@ const LoginPage = () => {
 
     try {
       // ← borra la línea "const API_URL = process.env..." que tenías aquí
-      const respuesta = await fetch(`${API_URL} /api/auth/login`, {
+      const respuesta = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, role }),
