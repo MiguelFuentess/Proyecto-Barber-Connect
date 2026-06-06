@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { useAuth } from '../context/AuthContext'; 
-import API_URL from '../config'; // ← usa este, borra el del try
+import API_URL from '../config'; // ← Usa este archivo centralizado
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -11,18 +11,22 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = async (role) => { // ← agrega async aquí
+  const handleLogin = async (role) => {
     if (!username.trim() || !password.trim()) {
       alert("Por favor, rellena todos los campos para iniciar sesión.");
       return;
     }
 
     try {
-      // ← borra la línea "const API_URL = process.env..." que tenías aquí
+      // Modificamos el cuerpo para cumplir con las reglas estrictas de NestJS
       const respuesta = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, role }),
+        body: JSON.stringify({ 
+          email: username, // ← Enviamos el texto del input con la etiqueta 'email'
+          password: password // ← Enviamos la contraseña tal cual
+          // Nota: Eliminamos 'role' porque el DTO del backend no lo permite
+        }),
       });
 
       const datos = await respuesta.json();
@@ -31,9 +35,10 @@ const LoginPage = () => {
         throw new Error(datos.message || 'Usuario o contraseña incorrectos');
       }
 
+      // Guardamos la sesión en tu contexto global de React
       login({ 
         nombre: datos.username || username, 
-        role: datos.role || role,
+        role: datos.role || role, // Usamos el rol que nos devuelva el backend o el del botón
         token: datos.token
       });
 
@@ -60,7 +65,7 @@ const LoginPage = () => {
         <div className="input-group-luxury">
           <input
             type="text"
-            placeholder="Ingresar Nombre de usuario"
+            placeholder="Ingresar Correo Electrónico" // Cambié el placeholder para guiar al usuario
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
