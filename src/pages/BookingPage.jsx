@@ -326,82 +326,64 @@ const StepConfirmar = ({ sede, servicios: serviciosSeleccionados, especialista, 
   const [notas, setNotas] = useState('');
 
   const handleConfirmar = async () => {
-  try {
-    const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
-
-    const respuesta = await fetch(`${API_URL}/appointments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user?.token}`,
-      },
-      body: JSON.stringify({
-        clientId: 'b0920726-d7c7-4116-98a0-433bcde30676',
-        employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
-        branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
-        appointmentDate: new Date().toISOString().split('T')[0],
-        startTime: horaLimpia,
-        endTime: horaLimpia,
-        services: [{ 
-          serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', 
-          quantity: 1 
-        }],
-        status: 'PENDING',
-        companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c',
-      }),
-    });
-
-    if (!respuesta.ok) {
-      const error = await respuesta.json();
-      throw new Error(error.message || 'Error al crear la cita');
-    }
-
-    const citaCreada = await respuesta.json();
-    agregarCita({ 
-      ...citaCreada,
-      sede: `Barber Connect Sede 1`,
-      especialista: especialista,
-      servicios: serviciosSeleccionados.map(s => s.desc),
-      fecha, hora 
-    });
-    alert('¡Reserva confirmada!');
-    navigate('/historial');
-
-  } catch (error) {
-    alert(error.message || 'Error al conectar con el servidor.');
-  }
-};
-
     try {
+      const horaLimpia = hora.replace(' AM', '').replace(' PM', '');
+
       if (citaEditandoId) {
-        // ← PATCH /api/appointments/{id}
-        const respuesta = await fetch(`${API_URL}/api/appointments/${citaEditandoId}`, {
+        const respuesta = await fetch(`${API_URL}/appointments/${citaEditandoId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user?.token}`,
           },
-          body: JSON.stringify(datosCita),
+          body: JSON.stringify({
+            clientId: 'b0920726-d7c7-4116-98a0-433bcde30676',
+            employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
+            branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
+            appointmentDate: new Date().toISOString().split('T')[0],
+            startTime: horaLimpia,
+            endTime: horaLimpia,
+            services: [{ serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', quantity: 1 }],
+            status: 'PENDING',
+            companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c',
+          }),
         });
-
         if (!respuesta.ok) throw new Error('Error al modificar la cita');
-        modificarCita(citaEditandoId, { ...datosCita, estado: 'Pendiente' });
+        modificarCita(citaEditandoId, { estado: 'Pendiente', fecha, hora, especialista });
         alert('¡Cita modificada exitosamente!');
 
       } else {
-        // ← POST /api/appointments
-        const respuesta = await fetch(`${API_URL}/api/appointments`, {
+        const respuesta = await fetch(`${API_URL}/appointments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${user?.token}`,
           },
-          body: JSON.stringify(datosCita),
+          body: JSON.stringify({
+            clientId: 'b0920726-d7c7-4116-98a0-433bcde30676',
+            employeeId: '6d91ca68-923f-4e47-a6c4-561942910492',
+            branchId: '9818ff19-d685-4f88-99dc-5ab5a7227f5c',
+            appointmentDate: new Date().toISOString().split('T')[0],
+            startTime: horaLimpia,
+            endTime: horaLimpia,
+            services: [{ serviceId: '4718a85d-002d-49a8-b4a1-bc41bf48607a', quantity: 1 }],
+            status: 'PENDING',
+            companyId: '6bc9e118-99c2-4c46-aa86-5aa0e4749b7c',
+          }),
         });
-
-        if (!respuesta.ok) throw new Error('Error al crear la cita');
+        if (!respuesta.ok) {
+          const error = await respuesta.json();
+          throw new Error(error.message || 'Error al crear la cita');
+        }
         const citaCreada = await respuesta.json();
-        agregarCita({ ...datosCita, id: citaCreada.id });
+        agregarCita({
+          ...citaCreada,
+          sede: `Barber Connect Sede 1`,
+          especialista,
+          servicios: serviciosSeleccionados.map(s => s.desc),
+          fecha,
+          hora
+        });
         alert('¡Reserva confirmada!');
       }
 
