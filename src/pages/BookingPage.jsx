@@ -4,7 +4,7 @@ import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
 import { FaArrowLeft, FaTimes, FaSearch, FaHome } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import './BookingPage.css';
-import API_URL from '../config'
+import API_URL from '../config';
 
 const sedes = [
   {
