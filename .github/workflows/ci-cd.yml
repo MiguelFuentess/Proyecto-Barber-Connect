@@ -18,7 +18,9 @@ jobs:
         cache: 'npm'
 
     - name: Instalar dependencias
-      run: npm ci
+      run: |
+        npm ci
+        npm install -D ts-node typescript
 
     # 1. Primero el Build (Ya sabemos que funciona con CI=false)
     - name: Build del Proyecto
@@ -34,3 +36,7 @@ jobs:
 
     - name: Pruebas de Integracion y E2E
       run: npx playwright test
+
+    - name: Pruebas de Integracion y E2E
+      # Forzamos a que solo busque en la carpeta 'tests' y nada más
+      run: npx playwright test tests/ --ignore-snapshots
