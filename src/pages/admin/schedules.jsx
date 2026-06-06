@@ -2,6 +2,7 @@ import React from "react";
 import Sidebar from "../../components/sidebar";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import API_URL from '../../config';
 
 const AdminSchedules = () => {
   const navigate = useNavigate();

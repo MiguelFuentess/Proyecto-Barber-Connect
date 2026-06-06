@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import { useAuth } from '../context/AuthContext'; 
+import API_URL from '../config'; // ← usa este, borra el del try
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,23 +11,40 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = (role) => {
+  const handleLogin = async (role) => { // ← agrega async aquí
     if (!username.trim() || !password.trim()) {
       alert("Por favor, rellena todos los campos para iniciar sesión.");
       return;
     }
 
-    // ← Aquí se guarda el usuario en el contexto
-    login({ 
-      nombre: username, 
-      role: role 
-    });
+    try {
+      // ← borra la línea "const API_URL = process.env..." que tenías aquí
+      const respuesta = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, role }),
+      });
 
-    console.log(`Intentando iniciar sesión como ${role}`);
-    if (role === 'admin') {
-      navigate('/configuration');
-    } else {
-      navigate('/');
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok) {
+        throw new Error(datos.message || 'Usuario o contraseña incorrectos');
+      }
+
+      login({ 
+        nombre: datos.username || username, 
+        role: datos.role || role,
+        token: datos.token
+      });
+
+      if (role === 'admin') {
+        navigate('/configuration');
+      } else {
+        navigate('/');
+      }
+
+    } catch (error) {
+      alert(error.message || "Error al conectar con el servidor.");
     }
   };
 

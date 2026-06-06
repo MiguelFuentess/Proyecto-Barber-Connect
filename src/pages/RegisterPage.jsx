@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './RegisterPage.css'; 
+import './RegisterPage.css';
+import API_URL from '../config';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -11,46 +12,54 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleRegister = () => {
-  // 1. Validar que nada esté vacío
-  if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
-    alert("Todos los campos son obligatorios.");
-    return;
-  }
+  const handleRegister = async () => { // ← async
+    if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+      alert("Todos los campos son obligatorios.");
+      return;
+    }
 
-  // 2. Validar que las contraseñas sean iguales
-  if (password !== confirmPassword) {
-    alert("Las contraseñas no coinciden.");
-    return;
-  }
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
 
-    login({
-      nombre: username,
-      email: email,
-      role: 'user'
-    });
+    try {
+      const respuesta = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password }),
+      });
 
-  // Si pasa las dos pruebas, entonces registra
-  console.log("Registro exitoso");
-  navigate('/');  
-};
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok) {
+        throw new Error(datos.message || 'Error al registrar usuario');
+      }
+
+      login({
+        nombre: datos.username || username,
+        email: datos.email || email,
+        role: datos.role || 'user',
+        token: datos.token
+      });
+
+      console.log("Registro exitoso");
+      navigate('/');
+
+    } catch (error) {
+      alert(error.message || "Error al conectar con el servidor.");
+    }
+  };
 
   return (
     <div className="register-page-container">
-      {/* Contenedor principal que centra todo, igual que en el Login */}
-      
-      {/* 1. Logo dorado arriba (fuera de la tarjeta) */}
       <div className="register-header-logo">
         <h1 className="brand-logo-gold">Barber Connect</h1>
       </div>
 
-      {/* 2. Título principal grande */}
       <h2 className="register-main-title">Registrarse</h2>
 
-      {/* 3. La tarjeta gris oscuro (Register Card) */}
       <div className="register-card-luxury">
-        
-        {/* Subtítulo dorado dentro de la tarjeta, como en tu diseño */}
         <h3 className="section-subtitle-gold">Registrarse</h3>
 
         <div className="input-group-luxury">
@@ -70,7 +79,7 @@ const RegisterPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        
+
         <div className="input-group-luxury">
           <input
             type="password"
@@ -80,7 +89,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Nuevo campo de Confirmar Contraseña */}
         <div className="input-group-luxury">
           <input
             type="password"
@@ -90,14 +98,12 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* 4. Botón de Registrarse (grande y dorado, dentro de la tarjeta) */}
         <div className="action-button-container">
           <button className="btn-gold-large" onClick={handleRegister}>
             Registrarse
           </button>
         </div>
 
-        {/* 5. Enlace para ir al Login */}
         <div className="form-footer-link">
           <span className="footer-text">Ya tengo cuenta:</span>
           <a href="/login" className="forgot-password-luxury">
