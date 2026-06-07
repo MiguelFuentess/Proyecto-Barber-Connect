@@ -3,6 +3,8 @@ name: Barber Connect CI/CD Pipeline
 on:
   push:
     branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
 
 jobs:
   build-and-test:
@@ -21,6 +23,9 @@ jobs:
       run: |
         npm install
         npm install -D ts-node typescript
+
+    - name: Lint del código
+      run: npx eslint src/ --ext .js,.jsx --max-warnings=50 || true
 
     - name: Build del Proyecto
       run: CI=false npm run build
