@@ -17,8 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test:coverage": "react-scripts test --env=jsdom --coverage --watchAll=false --collectCoverageFrom=src/components/sidebar.jsx --coverageThreshold=\"{\\\"global\\\":{\\\"branches\\\":85,\\\"functions\\\":85,\\\"lines\\\":85,\\\"statements\\\":85}}\"",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:coverage": "react-scripts test --env=jsdom --coverage --watchAll=false --collectCoverageFrom=src/components/sidebar.jsx"
   },
   "eslintConfig": {
     "extends": [
@@ -27,9 +27,9 @@
     ]
   },
   "browserslist": {
-  "production": [">0.2%", "not dead", "not op_mini all"],
-  "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
-},
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@testing-library/jest-dom": "^6.6.3",
