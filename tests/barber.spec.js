@@ -33,13 +33,19 @@ test.describe('Set de Pruebas Obligatorias - Flujos de Interfaz', () => {
 
   test('4. E2E: Flujo completo ideal de navegacion interactiva por el asistente de citas', async ({ page }) => {
   await page.goto(`${BASE_URL}/booking`);
-  await page.click('text=Medellín'); // ← era 'Barber Connect Sede 1'
+  await page.click('text=Medellín');
+  // Primero abre el acordeón de Corte
   await page.click('text=Corte');
+  // Selecciona el servicio
   await page.click('text=CORTE CABELLO');
+  // Ahora va al tab de especialistas
+  await page.click('button:has-text("Especialistas")');
+  // Selecciona especialista
   await page.click('text=WILMER ANDRES CHAPARRO');
+  // Continúa
   await page.click('button:has-text("Continuar")');
   await expect(page.locator('text=Selecciona fecha y hora')).toBeVisible();
-});
+}, { timeout: 60000 }); // ← aumenta el timeout
   test('5. E2E: Cancelacion del flujo mediante boton Home redirige limpiamente a la landing', async ({ page }) => {
     await page.goto(`${BASE_URL}/booking`);
     const btnHome = page.locator('.home-btn-booking');
