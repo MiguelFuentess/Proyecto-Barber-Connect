@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const BASE_URL = 'http://localhost:3000'; // Ajusta al puerto local de tu cliente
+const BASE_URL = process.env.BASE_URL || 'https://proyecto-barber-connect.vercel.app'; // Ajusta al puerto local de tu cliente
 
 test.describe('Set de Pruebas Obligatorias - Flujos de Interfaz', () => {
 
@@ -13,7 +13,7 @@ test.describe('Set de Pruebas Obligatorias - Flujos de Interfaz', () => {
     const searchInput = page.locator('input[placeholder*="Buscar"]');
     if (await searchInput.isVisible()) {
       await searchInput.fill('Sede Norte');
-      await expect(page.locator('text=Sede Sur')).setCount(0);
+      await expect(page.locator('text=Sede Sur')).toHaveCount(0);
     }
   });
 

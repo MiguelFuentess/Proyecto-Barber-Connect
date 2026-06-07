@@ -19,24 +19,19 @@ jobs:
 
     - name: Instalar dependencias
       run: |
-        npm ci
+        npm install
         npm install -D ts-node typescript
 
-    # 1. Primero el Build (Ya sabemos que funciona con CI=false)
     - name: Build del Proyecto
       run: CI=false npm run build
 
-    # 2. Pruebas Unitarias (Solo Jest)
     - name: Pruebas Unitarias
       run: npm run test:coverage
 
-    # 3. Pruebas E2E (Playwright - usa la config que ya definimos)
     - name: Instalar Navegadores Playwright
       run: npx playwright install --with-deps
 
-    - name: Pruebas de Integracion y E2E
-      run: npx playwright test
-
-    - name: Pruebas de Integracion y E2E
-      # Forzamos a que solo busque en la carpeta 'tests' y nada más
-      run: npx playwright test tests/ --ignore-snapshots
+    - name: Pruebas E2E
+      run: npx playwright test tests/
+      env:
+        BASE_URL: https://proyecto-barber-connect.vercel.app
